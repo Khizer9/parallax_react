@@ -5,9 +5,53 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+.parallax-container {
+  background-image: url('./Assets/bg.gif');
+  height: 100vh; 
+  overflow: hidden; 
+  position: relative;
+}
+
+.parallax-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%; 
+  width: auto;
+  transform-origin: top center;
+  transition: transform 0.5s ease-in-out;
+}
+
+
+.custom-cursor {
+  position: fixed;
+  width: 20px; 
+  height: 20px;
+  pointer-events: none;
+  z-index: 9999; 
+  transition: transform 0.2s ease-in-out;
+  will-change: transform;
+}
+
+/* Animate the cursor */
+.custom-cursor.animate {
+  animation: cursorAnimation 0.5s alternate infinite; 
+}
+
+@keyframes cursorAnimation {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px); 
+  }
 }
