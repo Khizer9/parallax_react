@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import cursor from '../Assets/mouse2.png';
 
-const frameCount = 149;
-const frameUrls = Array.from({ length: frameCount }, (_, index) => `Resized/${index + 1}.png`);
+const frameCount = 50;
+const frameUrls = Array.from({ length: frameCount }, (_, index) => `image/${index + 1}.png`);
 
 const ParallaxImageAnimation = () => {
   const [frameIndex, setFrameIndex] = useState(0);
@@ -48,7 +48,7 @@ const ParallaxImageAnimation = () => {
 
   const handleScroll = (e) => {
     const scrollDelta = e.deltaY;
-    const framesToScroll = 3;
+    const framesToScroll = 1;
     let newIndex = frameIndex + Math.sign(scrollDelta) * framesToScroll;
 
     newIndex = Math.min(frameCount - 1, Math.max(0, newIndex));
