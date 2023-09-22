@@ -7,6 +7,7 @@ const frameUrls = Array.from({ length: frameCount }, (_, index) => `Resized/${in
 const ParallaxImageAnimation = () => {
   const [frameIndex, setFrameIndex] = useState(0);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const handleMouseMove = (e) => {
     const mouseX = e.clientX;
@@ -17,6 +18,28 @@ const ParallaxImageAnimation = () => {
   useEffect(() => {
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
+
+    // Preload all images
+    const preloadImages = async () => {
+      const imagePromises = frameUrls.map((url) => {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          image.src = url;
+          image.onload = resolve;
+          image.onerror = reject;
+        });
+      });
+
+      try {
+        await Promise.all(imagePromises);
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error('Error preloading images:', error);
+      }
+    };
+
+    preloadImages();
+
     return () => {
       window.removeEventListener('wheel', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -35,7 +58,12 @@ const ParallaxImageAnimation = () => {
 
   return (
     <div className="parallax-container" style={{ backgroundImage: 'bg' }}>
+       {imagesLoaded ? (
       <img src={frameUrls[frameIndex]} alt={`Frame ${frameIndex}`} className="parallax-image" />
+    ) : (
+      // Display the loading spinner while images are loaded
+      <div className="loading-spinner"></div>
+    )}
 
       <div className="custom-cursor animate" style={{ left: cursorPosition.x, top: cursorPosition.y }}>
         <img src={cursor} style={{ width: '70px', height: '70px' }} alt="Custom Cursor" />
